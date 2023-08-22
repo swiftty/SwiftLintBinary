@@ -35,6 +35,11 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+    - name: git settings
+      run: |
+        # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
     - name: read version
       id: specific-version
       run: |
@@ -44,6 +49,20 @@ jobs:
       id: bundler
       with:
         variants-version: ${{ steps.specific-version.outputs.version }}
+    - name: update Package.swift
+      run: |
+        filename=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 3 | cut -d "/" -f 3)
+        new_url="https://github.com/swiftty/SwiftLintPlugin/releases/download/${{ steps.specific-version.outputs.version }}/$filename"
+        new_checksum=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 1)
+
+        sed "s|<url>|$new_url|" Package.template.swift > Package.template.swift.bak
+        sed "s|<checksum>|$new_checksum|" Package.template.swift.bak > Package.swift
+        rm -f Package.template.swift.bak
+
+        git add Package.swift
+        git commit -m 'update Package.swift'
+        git push origin HEAD
+
     - uses: softprops/action-gh-release@v1
       with:
         generate_release_notes: true
