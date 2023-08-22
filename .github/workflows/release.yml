@@ -35,6 +35,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: git settings
       run: |
         # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
