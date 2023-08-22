@@ -1,0 +1,3 @@
+[submodule "SwiftLint"]
+	path = SwiftLint
+	url = https://github.com/realm/SwiftLint.git

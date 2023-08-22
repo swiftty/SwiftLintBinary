@@ -1,0 +1,31 @@
+name: Periodic Update Check
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  check_and_commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate GitHub Apps token
+        id: generate
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ steps.generate.outputs.token }}
+
+      - name: git settings
+        run: |
+          # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: check version
+        run: |
+          bash check-version
