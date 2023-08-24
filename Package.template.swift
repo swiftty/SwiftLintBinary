@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftLintPlugin",
+    name: "SwiftLintBinary",
     products: [
         .plugin(name: "SwiftLintPlugin", targets: ["SwiftLintPlugin"])
     ],
