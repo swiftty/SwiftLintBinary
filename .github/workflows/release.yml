@@ -53,7 +53,7 @@ jobs:
     - name: update Package.swift
       run: |
         filename=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 3 | cut -d "/" -f 3)
-        new_url="https://github.com/swiftty/SwiftLintPlugin/releases/download/${{ steps.specific-version.outputs.version }}/$filename"
+        new_url="https://github.com/swiftty/SwiftLintBinary/releases/download/${{ steps.specific-version.outputs.version }}/$filename"
         new_checksum=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 1)
 
         sed "s|<url>|$new_url|" Package.template.swift > Package.template.swift.bak
