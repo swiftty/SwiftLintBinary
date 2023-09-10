@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "SwiftLintBinary",
     products: [
-        .plugin(name: "SwiftLintPlugin", targets: ["SwiftLintPlugin"])
+        .plugin(name: "SwiftLintPlugin", targets: ["SwiftLintPlugin"]),
+        .plugin(name: "SwiftLintCommandPlugin", targets: ["SwiftLintCommandPlugin"])
     ],
     targets: [
         .binaryTarget(
@@ -17,6 +18,18 @@ let package = Package(
         .plugin(
             name: "SwiftLintPlugin",
             capability: .buildTool(),
+            dependencies: [
+                "SwiftLintBinary"
+            ]
+        ),
+        .plugin(
+            name: "SwiftLintCommandPlugin",
+            capability: .command(
+                intent: .custom(
+                    verb: "swiftlint",
+                    description: "A tool to enforce Swift style and conventions."
+                )
+            ),
             dependencies: [
                 "SwiftLintBinary"
             ]
