@@ -14,7 +14,7 @@ jobs:
             setup-swift: true
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: true
     - uses: swift-actions/setup-swift@v1
@@ -35,7 +35,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: git settings
       run: |
         # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
@@ -88,7 +88,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: 'main'
     - name: git settings
@@ -110,7 +110,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: delete working branch
       run: |
         git push origin --delete ${{ github.ref_name }}
