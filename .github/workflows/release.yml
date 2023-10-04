@@ -19,11 +19,11 @@ jobs:
         submodules: true
     - uses: swift-actions/setup-swift@v1
       with:
-        swift-version: "5.8.1"
+        swift-version: "5.9"
       if: ${{ matrix.setup-swift }}
     - name: select Xcode
       run: |
-        sudo xcode-select --switch "/Applications/Xcode_14.3.1.app"
+        sudo xcode-select --switch "/Applications/Xcode_15.0.app"
       if: ${{ !matrix.setup-swift }}
     - uses: swiftty/swiftpm-artifactbundle-builder@v2
       with:
