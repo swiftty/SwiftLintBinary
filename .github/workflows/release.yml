@@ -23,7 +23,7 @@ jobs:
       if: ${{ matrix.setup-swift }}
     - name: select Xcode
       run: |
-        sudo xcode-select --switch "/Applications/Xcode_15.0.app"
+        sudo xcode-select --switch "/Applications/Xcode_15.0.1.app"
       if: ${{ !matrix.setup-swift }}
     - uses: swiftty/swiftpm-artifactbundle-builder@v2
       with:
