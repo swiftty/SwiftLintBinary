@@ -28,6 +28,7 @@ jobs:
     - uses: swiftty/swiftpm-artifactbundle-builder@v2
       with:
         path: SwiftLint
+        macos-archs: arm64
 
   release:
     needs: build
