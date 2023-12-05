@@ -17,18 +17,27 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
+
+    # for linux
     - uses: swift-actions/setup-swift@v1
       with:
         swift-version: "5.9"
       if: ${{ matrix.setup-swift }}
+    - uses: swiftty/swiftpm-artifactbundle-builder@2eb16507bcfc61b15506a1cfdda0242f72eb374c
+      with:
+        path: SwiftLint
+      if: ${{ matrix.setup-swift }}
+
+    # for macOS
     - name: select Xcode
       run: |
         sudo xcode-select --switch "/Applications/Xcode_15.0.1.app"
       if: ${{ !matrix.setup-swift }}
-    - uses: swiftty/swiftpm-artifactbundle-builder@v2
+    - uses: swiftty/swiftpm-artifactbundle-builder@2eb16507bcfc61b15506a1cfdda0242f72eb374c
       with:
         path: SwiftLint
-        macos-archs: arm64
+        use-xcode: true
+      if: ${{ !matrix.setup-swift }}
 
   release:
     needs: build
