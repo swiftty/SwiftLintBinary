@@ -23,7 +23,7 @@ jobs:
       with:
         swift-version: "5.9"
       if: ${{ matrix.setup-swift }}
-    - uses: swiftty/swiftpm-artifactbundle-builder@2eb16507bcfc61b15506a1cfdda0242f72eb374c
+    - uses: swiftty/swiftpm-artifactbundle-builder@81f1a5d5c9a505c27a848ad460bff9611b20f85a
       with:
         path: SwiftLint
       if: ${{ matrix.setup-swift }}
@@ -33,7 +33,7 @@ jobs:
       run: |
         sudo xcode-select --switch "/Applications/Xcode_15.0.1.app"
       if: ${{ !matrix.setup-swift }}
-    - uses: swiftty/swiftpm-artifactbundle-builder@2eb16507bcfc61b15506a1cfdda0242f72eb374c
+    - uses: swiftty/swiftpm-artifactbundle-builder@81f1a5d5c9a505c27a848ad460bff9611b20f85a
       with:
         path: SwiftLint
         use-xcode: true
