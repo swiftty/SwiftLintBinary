@@ -56,7 +56,7 @@ jobs:
       run: |
         version=$(echo "${{ github.ref_name }}" | sed 's/^release\///')
         echo "version=$version" >> "$GITHUB_OUTPUT"
-    - uses: swiftty/swiftpm-artifactbundle-bundler@v1
+    - uses: swiftty/swiftpm-artifactbundle-bundler@v3
       id: bundler
       with:
         variants-version: ${{ steps.specific-version.outputs.version }}
