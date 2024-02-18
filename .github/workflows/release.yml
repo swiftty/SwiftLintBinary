@@ -18,6 +18,10 @@ jobs:
       with:
         submodules: true
 
+    - name: Clone SwiftLint
+      run: |
+        bash clone-version
+
     # for linux
     - uses: swift-actions/setup-swift@v1
       with:

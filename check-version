@@ -1,8 +1,10 @@
 #!/bin/bash
 
+submodule_url="https://github.com/realm/SwiftLint"
 submodule_path="SwiftLint"
 
 get_latest_tag() {
+    git clone "$submodule_url" "$submodule_path"
     cd "$submodule_path" || exit
 
     git fetch --tags
@@ -17,13 +19,13 @@ check_version() {
         exit 1
     fi
 
-    current_tag=$(git -C "$submodule_path" describe --tags)
+    current_tag=$(cat version)
     if [ "$current_tag" = "$latest_tag" ]; then
         echo "No updates available."
     else
         echo "New version available: $latest_tag"
 
-        git -C "$submodule_path" checkout "$latest_tag"
+        echo "$latest_tag" > version
 
         git checkout -b "release/$latest_tag"
         git add -u
