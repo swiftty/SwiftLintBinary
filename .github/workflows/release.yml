@@ -27,21 +27,17 @@ jobs:
       with:
         swift-version: "5.9"
       if: ${{ matrix.setup-swift }}
-    - uses: swiftty/swiftpm-artifactbundle-builder@v3
-      with:
-        path: SwiftLint
-      if: ${{ matrix.setup-swift }}
-
     # for macOS
     - name: select Xcode
       run: |
         sudo xcode-select --switch "/Applications/Xcode_15.2.app"
       if: ${{ !matrix.setup-swift }}
+
     - uses: swiftty/swiftpm-artifactbundle-builder@v3
       with:
         path: SwiftLint
-        use-xcode: true
-      if: ${{ !matrix.setup-swift }}
+        copy-resources: LICENSE
+        use-xcode: ${{ !matrix.setup-swift }}
 
   release:
     needs: build
