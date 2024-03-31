@@ -31,7 +31,7 @@ check_version() {
         git add -u
 
         # update plugin code
-        cp -r $submodule_path/Plugins/SwiftLintPlugin Plugins
+        cp -r $submodule_path/Plugins/* Plugins
         git add Plugins
 
         git commit -m "update $submodule_path version to $latest_tag"
