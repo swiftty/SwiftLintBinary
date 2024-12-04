@@ -31,6 +31,11 @@ jobs:
     container:
       image: swift:6.0
     steps:
+    - name: Install tools on container
+      run: |
+        apt update
+        apt install -y jq
+
     - uses: actions/checkout@v4
       with:
         submodules: true
