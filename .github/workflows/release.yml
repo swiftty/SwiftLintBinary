@@ -5,14 +5,8 @@ on:
       - release/**
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-14]
-        include:
-          - os: ubuntu-latest
-            setup-swift: true
-    runs-on: ${{ matrix.os }}
+  macos-build:
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
       with:
@@ -22,25 +16,37 @@ jobs:
       run: |
         bash clone-version
 
-    # for linux
-    - uses: swift-actions/setup-swift@v2
-      with:
-        swift-version: "5.9"
-      if: ${{ matrix.setup-swift }}
-    # for macOS
     - name: select Xcode
       run: |
-        sudo xcode-select --switch "/Applications/Xcode_15.2.app"
-      if: ${{ !matrix.setup-swift }}
+        sudo xcode-select --switch "/Applications/Xcode_16.1.app"
 
     - uses: swiftty/swiftpm-artifactbundle-builder@v3
       with:
         path: SwiftLint
         copy-resources: LICENSE
-        use-xcode: ${{ !matrix.setup-swift }}
+        use-xcode: true
+
+  linux-build:
+    runs-on: ubuntu-latest
+    container:
+      image: 6.0-slim
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Clone SwiftLint
+      run: |
+        bash clone-version
+
+    - uses: swiftty/swiftpm-artifactbundle-builder@v3
+      with:
+        path: SwiftLint
+        copy-resources: LICENSE
+        use-xcode: false
 
   release:
-    needs: build
+    needs: [macos-build, linux-build]
     permissions:
       contents: write
     runs-on: ubuntu-latest
