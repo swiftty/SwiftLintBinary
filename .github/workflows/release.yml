@@ -8,47 +8,47 @@ jobs:
   macos-build:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Clone SwiftLint
-      run: |
-        bash clone-version
+      - name: Clone SwiftLint
+        run: |
+          bash clone-version
 
-    - name: select Xcode
-      run: |
-        sudo xcode-select --switch "/Applications/Xcode_16.1.app"
+      - name: select Xcode
+        run: |
+          sudo xcode-select --switch "/Applications/Xcode_16.2.app"
 
-    - uses: swiftty/swiftpm-artifactbundle-builder@v3
-      with:
-        path: SwiftLint
-        copy-resources: LICENSE
-        use-xcode: true
+      - uses: swiftty/swiftpm-artifactbundle-builder@v3
+        with:
+          path: SwiftLint
+          copy-resources: LICENSE
+          use-xcode: true
 
   linux-build:
     runs-on: ubuntu-latest
     container:
       image: swift:6.0
     steps:
-    - name: Install tools on container
-      run: |
-        apt update
-        apt install -y jq
+      - name: Install tools on container
+        run: |
+          apt update
+          apt install -y jq
 
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Clone SwiftLint
-      run: |
-        bash clone-version
+      - name: Clone SwiftLint
+        run: |
+          bash clone-version
 
-    - uses: swiftty/swiftpm-artifactbundle-builder@v3
-      with:
-        path: SwiftLint
-        copy-resources: LICENSE
-        use-xcode: false
+      - uses: swiftty/swiftpm-artifactbundle-builder@v3
+        with:
+          path: SwiftLint
+          copy-resources: LICENSE
+          use-xcode: false
 
   release:
     needs: [macos-build, linux-build]
@@ -56,52 +56,52 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: git settings
-      run: |
-        # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    - name: read version
-      id: specific-version
-      run: |
-        version=$(echo "${{ github.ref_name }}" | sed 's/^release\///')
-        echo "version=$version" >> "$GITHUB_OUTPUT"
-    - uses: swiftty/swiftpm-artifactbundle-bundler@v3
-      id: bundler
-      with:
-        variants-version: ${{ steps.specific-version.outputs.version }}
-    - name: update Package.swift
-      run: |
-        filename=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 3 | cut -d "/" -f 3)
-        new_url="https://github.com/swiftty/SwiftLintBinary/releases/download/${{ steps.specific-version.outputs.version }}/$filename"
-        new_checksum=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 1)
+      - uses: actions/checkout@v4
+      - name: git settings
+        run: |
+          # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: read version
+        id: specific-version
+        run: |
+          version=$(echo "${{ github.ref_name }}" | sed 's/^release\///')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - uses: swiftty/swiftpm-artifactbundle-bundler@v3
+        id: bundler
+        with:
+          variants-version: ${{ steps.specific-version.outputs.version }}
+      - name: update Package.swift
+        run: |
+          filename=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 3 | cut -d "/" -f 3)
+          new_url="https://github.com/swiftty/SwiftLintBinary/releases/download/${{ steps.specific-version.outputs.version }}/$filename"
+          new_checksum=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 1)
 
-        sed "s|<url>|$new_url|" Package.template.swift > Package.template.swift.bak
-        sed "s|<checksum>|$new_checksum|" Package.template.swift.bak > Package.swift
-        rm -f Package.template.swift.bak
+          sed "s|<url>|$new_url|" Package.template.swift > Package.template.swift.bak
+          sed "s|<checksum>|$new_checksum|" Package.template.swift.bak > Package.swift
+          rm -f Package.template.swift.bak
 
-        git add Package.swift
-        git commit -m 'update Package.swift'
-        git push origin HEAD
+          git add Package.swift
+          git commit -m 'update Package.swift'
+          git push origin HEAD
 
-    - uses: softprops/action-gh-release@v2
-      with:
-        generate_release_notes: true
-        tag_name: ${{ steps.specific-version.outputs.version }}
-        target_commitish: ${{ github.ref_name }}
-        body: |
-          ## Checksums
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          tag_name: ${{ steps.specific-version.outputs.version }}
+          target_commitish: ${{ github.ref_name }}
+          body: |
+            ## Checksums
 
-          - for `.binaryTarget(name:url:checksum:)`
+            - for `.binaryTarget(name:url:checksum:)`
 
-            ```
-            ${{ steps.bundler.outputs.checksums }}
-            ```
+              ```
+              ${{ steps.bundler.outputs.checksums }}
+              ```
 
-          ---
-        files: |
-          ${{ steps.bundler.outputs.path }}/**
+            ---
+          files: |
+            ${{ steps.bundler.outputs.path }}/**
 
   git:
     needs: release
@@ -109,20 +109,20 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: 'main'
-    - name: git settings
-      run: |
-        # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    - name: merge to main
-      run: |
-        git fetch origin ${{ github.ref_name }}
-        git merge origin/${{ github.ref_name }}
-        git push origin main
-        git push origin --delete ${{ github.ref_name }}
+      - uses: actions/checkout@v4
+        with:
+          ref: "main"
+      - name: git settings
+        run: |
+          # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: merge to main
+        run: |
+          git fetch origin ${{ github.ref_name }}
+          git merge origin/${{ github.ref_name }}
+          git push origin main
+          git push origin --delete ${{ github.ref_name }}
 
   git-clean:
     needs: release
@@ -131,7 +131,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: delete working branch
-      run: |
-        git push origin --delete ${{ github.ref_name }}
+      - uses: actions/checkout@v4
+      - name: delete working branch
+        run: |
+          git push origin --delete ${{ github.ref_name }}
