@@ -58,6 +58,9 @@ struct SwiftLintBuildToolPlugin: BuildToolPlugin {
             // so we need to ensure that any exclusion rules in the configuration are
             // respected.
             "--force-exclude",
+            // Improve performance by using the alternative excluding method.
+            // https://github.com/realm/SwiftLint/issues/6084
+            "--use-alternative-excluding",
         ]
         // Determine whether we need to enable cache or not (for Xcode Cloud we don't)
         let cacheArguments: [String]
