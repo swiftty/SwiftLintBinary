@@ -20,7 +20,7 @@ jobs:
         run: |
           sudo xcode-select --switch "/Applications/Xcode_16.2.app"
 
-      - uses: swiftty/swiftpm-artifactbundle-builder@v3
+      - uses: swiftty/swiftpm-artifactbundle-builder@v4
         with:
           path: SwiftLint
           copy-resources: LICENSE
@@ -44,7 +44,7 @@ jobs:
         run: |
           bash clone-version
 
-      - uses: swiftty/swiftpm-artifactbundle-builder@v3
+      - uses: swiftty/swiftpm-artifactbundle-builder@v4
         with:
           path: SwiftLint
           copy-resources: LICENSE
