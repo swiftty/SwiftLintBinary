@@ -73,7 +73,7 @@ jobs:
           variants-version: ${{ steps.specific-version.outputs.version }}
       - name: update Package.swift
         run: |
-          filename=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 3 | cut -d "/" -f 3)
+          filename=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 3 | cut -d "/" -f 2)
           new_url="https://github.com/swiftty/SwiftLintBinary/releases/download/${{ steps.specific-version.outputs.version }}/$filename"
           new_checksum=$(echo "${{ steps.bundler.outputs.checksums }}" | cut -d " " -f 1)
 
