@@ -6,7 +6,7 @@ struct SwiftLintBuildToolPlugin: BuildToolPlugin {
     func createBuildCommands(
         context: PluginContext,
         target: Target
-    ) async throws -> [Command] {
+    ) throws -> [Command] {
         try makeCommand(executable: context.tool(named: "swiftlint"),
                         swiftFiles: (target as? SourceModuleTarget).flatMap(swiftFiles) ?? [],
                         environment: environment(context: context, target: target),
@@ -50,7 +50,9 @@ struct SwiftLintBuildToolPlugin: BuildToolPlugin {
             return []
         }
         // Outputs the environment to the build log for reference.
+        #if DEBUG
         print("Environment:", environment)
+        #endif
         let arguments: [String] = [
             "lint",
             "--quiet",
@@ -58,9 +60,6 @@ struct SwiftLintBuildToolPlugin: BuildToolPlugin {
             // so we need to ensure that any exclusion rules in the configuration are
             // respected.
             "--force-exclude",
-            // Improve performance by using the alternative excluding method.
-            // https://github.com/realm/SwiftLint/issues/6084
-            "--use-alternative-excluding",
         ]
         // Determine whether we need to enable cache or not (for Xcode Cloud we don't)
         let cacheArguments: [String]
