@@ -12,8 +12,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "SwiftLintBinary",
-            url: "https://github.com/swiftty/SwiftLintBinary/releases/download/0.62.2/SwiftLintBinary.artifactbundle.zip",
-            checksum: "c060c6b4ba2e383e0bd62152154f0776d6e72ab999372d005417845ed9bbdfb7"
+            url: "https://github.com/swiftty/SwiftLintBinary/releases/download/0.63.0-rc.2/SwiftLintBinary.artifactbundle.zip",
+            checksum: "859c30b53fff85f6a0486f73d90c18ef2572f9562fb1a9aeffbc169ea5bdf684"
         ),
         .plugin(
             name: "SwiftLintBuildToolPlugin",
