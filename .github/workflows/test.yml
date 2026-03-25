@@ -12,9 +12,11 @@ jobs:
     strategy:
       matrix:
         include:
+          # renovate: datasource=github-runners
           - os: macos-26
             xcode: "/Applications/Xcode_26.3.app"
           - os: ubuntu-latest
+            # renovate: datasource=docker
             container: swift:6.2
     runs-on: ${{ matrix.os }}
     container:
