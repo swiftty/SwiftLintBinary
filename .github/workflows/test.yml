@@ -1,0 +1,40 @@
+name: test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-26
+            xcode: "/Applications/Xcode_26.3.app"
+          - os: ubuntu-latest
+            container: swift:6.2
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.container }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Clone SwiftLint
+        run: |
+          bash clone-version
+      - uses: actions/cache@v5
+        with:
+          path: SwiftLint/.build
+          key: ${{ runner.os }}-swiftlint-${{ hashFiles('SwiftLint/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swiftlint-${{ hashFiles('SwiftLint/Package.resolved') }}
+            ${{ runner.os }}-swiftlint
+      - name: Select Xcode
+        if: matrix.xcode != null
+        run: sudo xcode-select --switch "${{ matrix.xcode }}"
+      - name: Swift version
+        run: swift --version
+      - name: Make project
+        run: cd SwiftLint && swift build
