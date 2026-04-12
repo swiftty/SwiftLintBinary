@@ -85,7 +85,7 @@ jobs:
           git commit -m 'update Package.swift'
           git push origin HEAD
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
           tag_name: ${{ steps.specific-version.outputs.version }}
