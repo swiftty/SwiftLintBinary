@@ -8,7 +8,7 @@ jobs:
   macos-build:
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
 
@@ -37,7 +37,7 @@ jobs:
           apt update
           apt install -y jq
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
 
@@ -57,7 +57,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: git settings
         run: |
           # https://qiita.com/thaim/items/3d1a4d09ec4a7d8844ce
@@ -110,7 +110,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: "main"
       - name: git settings
@@ -132,7 +132,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: delete working branch
         run: |
           git push origin --delete ${{ github.ref_name }}
