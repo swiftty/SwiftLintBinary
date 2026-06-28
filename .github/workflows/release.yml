@@ -19,7 +19,7 @@ jobs:
       - name: select Xcode
         run: |
           # renovate-xcodereleases: runs-on=macos-26
-          sudo xcode-select --switch "/Applications/Xcode_26.5.app"
+          sudo xcode-select --switch "/Applications/Xcode_26.6.app"
 
       - uses: swiftty/swiftpm-artifactbundle-builder@v4
         with:
